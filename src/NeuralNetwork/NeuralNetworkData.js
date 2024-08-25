@@ -3,6 +3,7 @@ import axios from "axios";
 import { saveBlob } from "../utils/io";
 import modelLoader from '../utils/modelLoader';
 import nnUtils from "./NeuralNetworkUtils";
+import { readFromDB, writeToDB } from '../utils/indexedDb';
 
 class NeuralNetworkData {
   constructor() {
@@ -705,6 +706,11 @@ class NeuralNetworkData {
     );
   }
 
+  async saveMetaIdb(modelName = "model") {
+    // save this.meta to IndexedDB
+    await writeToDB(`ml5.neuralNetworkData.${modelName}`, this.meta);
+  }
+
   /**
    * load a model and metadata
    * @param {string | FileList | Object} filesOrPath
@@ -734,6 +740,13 @@ class NeuralNetworkData {
       this.meta = metadataResult.data;
     }
 
+    this.isMetadataReady = true;
+    this.isWarmedUp = true;
+  }
+
+  async loadMetaIdb(modelName = "model") {
+    // load this.meta from IndexedDB
+    this.meta = await readFromDB(`ml5.neuralNetworkData.${modelName}`);
     this.isMetadataReady = true;
     this.isWarmedUp = true;
   }

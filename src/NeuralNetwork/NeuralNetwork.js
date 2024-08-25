@@ -199,6 +199,17 @@ class NeuralNetwork {
   }
 
   /**
+   * Save the model to IndexedDB
+   * 
+   * @param {*} modelName 
+   * @return {Promise<void>}
+   */
+  async saveIdb(modelName = "model") {
+    const internalModelName = `ml5.neuralNetwork.${modelName}`;
+    await this.model.save(`indexeddb://${internalModelName}`);
+  }
+
+  /**
    * loads the model and weights
    * @param {string | FileList | Object} filesOrPath
    */
@@ -228,6 +239,17 @@ class NeuralNetwork {
     this.isCompiled = true;
     this.isLayered = true;
     this.isTrained = true;
+  }
+
+  /**
+   * Load the model from IndexedDB
+   * 
+   * @param {*} modelName 
+   * @returns {Promise<tf.LayersModel>}
+   */
+  async loadIdb(modelName = "model") {
+    const internalModelName = `ml5.neuralNetwork.${modelName}`;
+    return await tf.loadLayersModel(`indexeddb://${internalModelName}`);
   }
 
   /**

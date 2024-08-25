@@ -34,6 +34,6 @@ const ml5 = Object.assign({ p5Utils }, withPreload, {
 
 p5Utils.shouldPreload(ml5, Object.keys(withPreload));
 
-communityStatement();
+// communityStatement();
 
 export default ml5;

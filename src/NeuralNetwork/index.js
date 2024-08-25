@@ -796,9 +796,9 @@ class DiyNeuralNetwork {
 
     options.optimizer = options.optimizer
       ? this.neuralNetwork.setOptimizerFunction(
-          LEARNING_RATE,
-          options.optimizer
-        )
+        LEARNING_RATE,
+        options.optimizer
+      )
       : this.neuralNetwork.setOptimizerFunction(LEARNING_RATE, tf.train.sgd);
 
     this.neuralNetwork.compile(options);
@@ -1191,6 +1191,17 @@ class DiyNeuralNetwork {
     ]), args.callback);
   }
 
+  async saveIdb(name, callback) {
+    const args = handleArguments(name, callback);
+    const modelName = args.string || 'model';
+
+    // save the model
+    return callCallback(Promise.all([
+      this.neuralNetwork.saveIdb(modelName),
+      this.neuralNetworkData.saveMetaIdb(modelName)
+    ]), args.callback);
+  }
+
   /**
    * @public - also called internally by init() when there is a modelUrl in the options
    * load a model and metadata
@@ -1203,6 +1214,13 @@ class DiyNeuralNetwork {
     return callCallback(Promise.all([
       this.neuralNetwork.load(filesOrPath),
       this.neuralNetworkData.loadMeta(filesOrPath)
+    ]), callback);
+  }
+
+  async loadIdb(filesOrPath, callback) {
+    return callCallback(Promise.all([
+      this.neuralNetwork.loadIdb(filesOrPath),
+      this.neuralNetworkData.loadMetaIdb(filesOrPath)
     ]), callback);
   }
 
